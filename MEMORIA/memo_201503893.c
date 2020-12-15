@@ -55,7 +55,7 @@ static int iniciar(void)
 static void salir(void)
 {
     remove_proc_entry("memo_201503893", NULL);
-    printk(KERN_INFO "Sistemas Operativos 1 \n");
+    printk(KERN_INFO "Sistemas Operativos 1\n");
 }
  
 module_init(iniciar);
