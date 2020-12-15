@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -27,20 +28,6 @@ type Message struct {
 	Time int64
 }
 
-type allTasks []task
-
-var tasks = allTasks{
-	{
-		ID:      1,
-		Name:    "Brandon Soto",
-		Content: "Some content",
-	}, {
-		ID:      1,
-		Name:    "Brandon Soto",
-		Content: "Some content",
-	},
-}
-
 func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Home")
 }
@@ -60,9 +47,13 @@ func reader(conn *websocket.Conn) {
 
 		b, err := json.Marshal(m)
 
-		if err := conn.WriteMessage(messageType, b); err != nil {
-			log.Println(err)
+		for i := 0; i < 10; i++ {
+			if err := conn.WriteMessage(messageType, b); err != nil {
+				time.Sleep(10000 * time.Millisecond)
+				log.Println(err)
+			}
 		}
+
 	}
 
 }
