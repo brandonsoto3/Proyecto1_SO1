@@ -19,6 +19,32 @@ MODULE_AUTHOR("BRANDON JAVIER SOTO CASTAÑEDA 201503893");
 
 struct sysinfo inf;
 
+int contador = 0;
+long total_memoria = 0;
+
+static int write_file(struct seq_file * m, void *v) {	
+    cont = 1;
+    si_meminfo(&inf);
+    total_memoria 	= (inf.totalram * 4)/1024;    
+    seq_printf(m,"{\n");
+    seq_printf(m,"      \"struct_lista_procesos\":[\n");
+    dfs(&init_task, m, 0);
+    seq_printf(m,"      ]\n");
+    seq_printf(m,"}\n");
+    return 0;
+}
+
+static int open(struct inode *inode, struct  file *file) {
+  return single_open(file, write_file, NULL);
+}
+
+static struct file_operations operaciones =
+{    
+    .open = open,
+    .read = seq_read
+};
+
+
 static int iniciar(void)
 {
     proc_create("cpu_201503893", 0, NULL, &operaciones);
