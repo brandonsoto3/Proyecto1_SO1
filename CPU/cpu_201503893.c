@@ -78,7 +78,7 @@ void recorrer_tareas(struct task_struct *task, struct seq_file * m, int num)
 
     seq_printf(m,",\n");
 
-    //============= Porcentaje RAM ============
+    //Porcentaje de la memoria RAM 
     long memoria_utilizada = 0;
     if(task_next->mm){
         memoria_utilizada = (task_next->mm->total_vm <<(PAGE_SHIFT -10));
@@ -86,10 +86,10 @@ void recorrer_tareas(struct task_struct *task, struct seq_file * m, int num)
     }
 
     //memoria_utilizada*100/total_memoria
-    seq_printf(m,"      \"PorcentajeRam\": %i",memoria_utilizada);
+    seq_printf(m,"      \"Porcentaje_RAM\": %i",memoria_utilizada);
     seq_printf(m,",\n");
 
-    //============= PPID ======================
+    //PPID
     seq_printf(m,"      \"PPID\":%d\n",num);
     
     if(cant > 1){
@@ -114,7 +114,7 @@ static int write_file(struct seq_file * m, void *v) {
     si_meminfo(&inf);
     total_memoria 	= (inf.totalram * 4)/1024;    
     seq_printf(m,"{\n");
-    seq_printf(m,"      \"struct_lista_procesos\":[\n");
+    seq_printf(m,"      \"lista_procesos\":[\n");
     recorrer_tareas(&init_task, m, 0);
     seq_printf(m,"      ]\n");
     seq_printf(m,"}\n");

@@ -24,7 +24,7 @@ static int write_file(struct seq_file * archivo, void *v) {
     long memoria_libre 	= (inf.freeram * 4 );
     long memoria_utilizada = total_memoria - memoria_libre;
     seq_printf(archivo, "{\n");
-    seq_printf(archivo, "       \"struct_lista_ram\":[\n");
+    seq_printf(archivo, "       \"lista_ram\":[\n");
     seq_printf(archivo, "               {\n");
     seq_printf(archivo, "                   \"Total_de_memoria_RAM_del_servidor\":%lu,\n", total_memoria / 1024);
     seq_printf(archivo, "                   \"Total_de_memoria_RAM_consumida\":%lu,\n",memoria_utilizada / 1024);
