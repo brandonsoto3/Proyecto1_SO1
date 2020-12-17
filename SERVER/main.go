@@ -212,7 +212,7 @@ func reader(conn *websocket.Conn) {
 		data := StructListaRam{}
 		json.Unmarshal([]byte(file), &data)
 		//json.NewEncoder(w).Encode(data.StructListaRam[0])
-		b, err := json.Marshal(data.StructListaRam[0])
+		b, err := json.Marshal([]byte(file))
 
 		for {
 			if err := conn.WriteMessage(messageType, b); err != nil {
