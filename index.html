@@ -3,15 +3,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
     <script>
+
+function socket(parametro){
         let socket=new WebSocket("ws://localhost:3000/ws")
         console.log("Esperando conexion del Socket")
 
         socket.onopen=()=>{
             console.log("Conexion establecida");
-            socket.send("Hola desde el cliente");
+            socket.send(parametro);
         }
 
         socket.onclose=(event)=>{
@@ -26,9 +26,24 @@
         socket.onerror=(error)=>{
             console.log("Error al conectar",error);            
         }
+        }
 
     </script>
+</head>
+<body>
+    
 
     <h1>WELCOMES</h1>
+    
+    <div>
+    <a class="btn btn-primary btn-lg" href='javascript:;' onclick="socket('cpu');" role="button">
+        cpu
+      </a>
+    </div>
+    <div>
+        <a class="btn btn-primary btn-lg" href='javascript:;' onclick="socket('memoria');" role="button">
+            memoria
+          </a>
+        </div>
 </body>
 </html>

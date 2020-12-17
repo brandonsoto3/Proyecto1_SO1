@@ -38,11 +38,17 @@ type structProcesos struct {
 }
 
 type ListaProcesos struct {
-	ListaProcesos []structProcesos `json:"struct_lista_procesos"`
+	ListaProcesos []structProcesos `json:"lista_procesos"`
+}
+
+type Message struct {
+	Name string
+	Body string
+	Time int64
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Home")
+	fmt.Fprint(w, "Homies")
 }
 
 func reader(conn *websocket.Conn) {
@@ -56,15 +62,16 @@ func reader(conn *websocket.Conn) {
 		}
 		//MENSAJE RECIBIDO DESDE EL CLIENTE
 		log.Println(string(p))
+
 		m := Message{"AÑON", "Hello", 1294706395881547000}
 
 		b, err := json.Marshal(m)
 
-		for i := 0; i < 10; i++ {
+		for {
 			if err := conn.WriteMessage(messageType, b); err != nil {
-				time.Sleep(10000 * time.Millisecond)
 				log.Println(err)
 			}
+			time.Sleep(2 * time.Second)
 		}
 
 	}
@@ -88,6 +95,7 @@ func main() {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/", homePage)
+	router.HandleFunc("/ws", wsEndPoint)
 	router.HandleFunc("/cpu", cpu).Methods("GET", "OPTIONS")
 	log.Fatal(http.ListenAndServe(":3000", router))
 
@@ -100,9 +108,9 @@ func cpu(w http.ResponseWriter, req *http.Request) {
 	data := ListaProcesos{}
 	_ = json.Unmarshal([]byte(file), &data) //SERIALIZZAR LA DATA
 
-	for i := 0; i < len(data.StructListaProcesos); i++ {
-		var temporal float64 = data.StructListaProcesos[i].PorcentajeRam
-		data.StructListaProcesos[i].PorcentajeRam = (temporal / tam) * 100
+	for i := 0; i < len(data.ListaProcesos); i++ {
+		var temporal float64 = data.ListaProcesos[i].PorcentajeRam
+		data.ListaProcesos[i].PorcentajeRam = (temporal / tam) * 100
 	}
-	json.NewEncoder(w).Encode(data.StructListaProcesos)
+	json.NewEncoder(w).Encode(data.ListaProcesos)
 }
