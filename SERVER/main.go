@@ -28,6 +28,16 @@ type task struct {
 	Content string `json:Content`
 }
 
+type strRam struct {
+	Memoria_Total     int `json:"Memoria_Total,omitempty"`
+	Memoria_en_uso    int `json:"Memoria_en_uso,omitempty"`
+	Porcentaje_en_uso int `json:"Porcentaje_en_uso,omitempty"`
+}
+
+type ListaRam struct {
+	ListaRam []strRam `json:"lista_ram"`
+}
+
 type structProcesos struct {
 	Pid           int     `json:"PID,omitempty"`
 	Nombre        string  `json:"Nombre,omitempty"`
@@ -93,11 +103,17 @@ func wsEndPoint(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
+	file, _ := ioutil.ReadFile("/proc/memo_201503893")
+	data := ListaRam{}
+	_ = json.Unmarshal([]byte(file), &data)
+	tam = float64(data.ListaRam[0].Memoria_Total)
 	router := mux.NewRouter()
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/ws", wsEndPoint)
 	router.HandleFunc("/cpu", cpu).Methods("GET", "OPTIONS")
+	router.HandleFunc("/prueba", homePage)
 	log.Fatal(http.ListenAndServe(":80", router))
+	fmt.Println("Servidor iniciado")
 
 }
 
