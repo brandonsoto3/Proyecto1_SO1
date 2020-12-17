@@ -207,9 +207,12 @@ func reader(conn *websocket.Conn) {
 		//MENSAJE RECIBIDO DESDE EL CLIENTE
 		log.Println(string(p))
 
-		m := Message{"AÑON", "Hello", 1294706395881547000}
-
-		b, err := json.Marshal(m)
+		//m := Message{"AÑON", "Hello", 1294706395881547000}
+		file, u := ioutil.ReadFile("/proc/memo_201503893")
+		data := StructListaRam{}
+		u = json.Unmarshal([]byte(file), &data)
+		//json.NewEncoder(w).Encode(data.StructListaRam[0])
+		b, err := json.Marshal(u)
 
 		for {
 			if err := conn.WriteMessage(messageType, b); err != nil {
@@ -243,9 +246,9 @@ func main() {
 
 	router.HandleFunc("/", inicio)
 	router.HandleFunc("/procesos", enviarProcesos).Methods("GET", "OPTIONS")
-	router.HandleFunc("/ws", wsEndPoint)
 	router.HandleFunc("/ram", informacionRAM).Methods("GET", "OPTIONS")
 	router.HandleFunc("/kill/{id}", matarProceso).Methods("POST", "OPTIONS")
+	router.HandleFunc("/ws", wsEndPoint)
 
 	fmt.Println("El servidor se ha iniciado en el puerto 80")
 	log.Fatal(http.ListenAndServe(":80", router))
@@ -264,18 +267,12 @@ func enviarProcesos(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	file, _ := ioutil.ReadFile("/proc/cpu_201503893")
-
 	data := StructListaProcesos{}
-
 	_ = json.Unmarshal([]byte(file), &data)
-
-	//fmt.Println("Tamanio: ", len(data.StructListaProcesos))
 	for i := 0; i < len(data.StructListaProcesos); i++ {
 		var temporal float64 = data.StructListaProcesos[i].PorcentajeRam
 		data.StructListaProcesos[i].PorcentajeRam = (temporal / tamanio) * 100
-		//fmt.Println("Valor: ", data.StructListaProcesos[i])
 	}
-
 	json.NewEncoder(w).Encode(data.StructListaProcesos)
 }
 
