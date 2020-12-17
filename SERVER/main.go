@@ -208,11 +208,11 @@ func reader(conn *websocket.Conn) {
 		log.Println(string(p))
 
 		//m := Message{"AÑON", "Hello", 1294706395881547000}
-		file, u := ioutil.ReadFile("/proc/memo_201503893")
+		file, _ := ioutil.ReadFile("/proc/memo_201503893")
 		data := StructListaRam{}
-		u = json.Unmarshal([]byte(file), &data)
+		json.Unmarshal([]byte(file), &data)
 		//json.NewEncoder(w).Encode(data.StructListaRam[0])
-		b, err := json.Marshal(u)
+		b, err := json.Marshal(data.StructListaRam[0])
 
 		for {
 			if err := conn.WriteMessage(messageType, b); err != nil {
