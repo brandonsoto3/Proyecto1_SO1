@@ -285,7 +285,7 @@ func informacionRAM(w http.ResponseWriter, req *http.Request) {
 	_ = json.Unmarshal([]byte(file), &data)
 	json.NewEncoder(w).Encode(data.StructListaRam[0])
 
-	fmt.Println(data)
+	fmt.Println(data.StructListaRam[0])
 
 }
 
