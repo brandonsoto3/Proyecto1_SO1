@@ -283,9 +283,8 @@ func informacionRAM(w http.ResponseWriter, req *http.Request) {
 	file, _ := ioutil.ReadFile("/proc/memo_201503893")
 	data := StructListaRam{}
 	_ = json.Unmarshal([]byte(file), &data)
-	json.NewEncoder(w).Encode(data.StructListaRam[0])
 
-	fmt.Println(data.StructListaRam[0])
+	fmt.Println(json.NewEncoder(w).Encode(data.StructListaRam[0]))
 
 }
 
