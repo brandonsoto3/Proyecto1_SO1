@@ -206,13 +206,9 @@ func reader(conn *websocket.Conn) {
 		}
 		//MENSAJE RECIBIDO DESDE EL CLIENTE
 		log.Println(string(p))
-
-		//m := Message{"AÑON", "Hello", 1294706395881547000}
 		file, _ := ioutil.ReadFile("/proc/memo_201503893")
 		data := StructListaRam{}
-		json.Unmarshal([]byte(file), &data)
-		//json.NewEncoder(w).Encode(data.StructListaRam[0])
-		b, err := json.Marshal([]byte(file))
+		b, err := json.Marshal(json.Unmarshal([]byte(file), &data))
 
 		for {
 			if err := conn.WriteMessage(messageType, b); err != nil {
