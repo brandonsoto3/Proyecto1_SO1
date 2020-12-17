@@ -7,3 +7,8 @@ insmod ...ko
 rmmod ...ko
 
 dmesg
+
+
+go get -u github.com/gorilla/mux
+go get github.com/gorilla/websocket
+sudo lsof -t -i tcp:80 -s tcp:listen | sudo xargs kill

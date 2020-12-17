@@ -144,9 +144,17 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 )
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
+}
 
 //STRUCTS DEL WEB SERVICE
 type structRam struct {
@@ -176,10 +184,56 @@ type structKill struct {
 	Pid string `json:"pid,omitempty"`
 }
 
+type Message struct {
+	Name string
+	Body string
+	Time int64
+}
+
 //VARIABLES
 var (
 	tamanio float64 = 0
 )
+
+func reader(conn *websocket.Conn) {
+
+	for {
+		messageType, p, err := conn.ReadMessage()
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		//MENSAJE RECIBIDO DESDE EL CLIENTE
+		log.Println(string(p))
+
+		m := Message{"AÑON", "Hello", 1294706395881547000}
+
+		b, err := json.Marshal(m)
+
+		for {
+			if err := conn.WriteMessage(messageType, b); err != nil {
+				log.Println(err)
+			}
+			time.Sleep(2 * time.Second)
+		}
+
+	}
+
+}
+
+func wsEndPoint(w http.ResponseWriter, r *http.Request) {
+
+	ws, err := upgrader.Upgrade(w, r, nil)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println("Conexion establecida")
+	reader(ws)
+
+}
 
 func main() {
 	//Obtenemos el tamanio
@@ -189,6 +243,7 @@ func main() {
 
 	router.HandleFunc("/", inicio)
 	router.HandleFunc("/procesos", enviarProcesos).Methods("GET", "OPTIONS")
+	router.HandleFunc("/ws", wsEndPoint)
 	router.HandleFunc("/ram", informacionRAM).Methods("GET", "OPTIONS")
 	router.HandleFunc("/kill/{id}", matarProceso).Methods("POST", "OPTIONS")
 
@@ -229,16 +284,8 @@ func informacionRAM(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	file, _ := ioutil.ReadFile("/proc/memo_201503893")
-
 	data := StructListaRam{}
-
 	_ = json.Unmarshal([]byte(file), &data)
-
-	/*fmt.Println("Tamanio: ", len(data.StructListaRam))
-	for i := 0; i < len(data.StructListaRam); i++ {
-		fmt.Println("Valor: ", data.StructListaRam[i])
-	}*/
-
 	json.NewEncoder(w).Encode(data.StructListaRam[0])
 }
 
