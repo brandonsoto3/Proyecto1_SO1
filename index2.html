@@ -20,7 +20,7 @@ function socket(parametro){
 
         
         socket.onmessage=(msg)=>{
-            console.log(JSON.parse(msg.data).Name);
+            console.log(msg);
         }
 
         socket.onerror=(error)=>{

@@ -143,6 +143,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"time"
 
@@ -206,9 +207,19 @@ func reader(conn *websocket.Conn) {
 		}
 		//MENSAJE RECIBIDO DESDE EL CLIENTE
 		log.Println(string(p))
-		file, _ := ioutil.ReadFile("/proc/memo_201503893")
-		data := StructListaRam{}
-		b, err := json.Marshal(json.Unmarshal([]byte(file), &data))
+
+		file, err := os.Open("/proc/memo_201503893")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer func() {
+			if err = file.Close(); err != nil {
+				log.Fatal(err)
+			}
+		}()
+
+		b, err := ioutil.ReadAll(file)
+		fmt.Print(b)
 
 		for {
 			if err := conn.WriteMessage(messageType, b); err != nil {
