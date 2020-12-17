@@ -280,11 +280,11 @@ func enviarProcesos(w http.ResponseWriter, req *http.Request) {
 func informacionRAM(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	file, _ := ioutil.ReadFile("/proc/memo_201503893")
+	file, a := ioutil.ReadFile("/proc/memo_201503893")
 	data := StructListaRam{}
-	_ = json.Unmarshal([]byte(file), &data)
+	a = json.Unmarshal([]byte(file), &data)
 
-	fmt.Println(file)
+	fmt.Println(a)
 	json.NewEncoder(w).Encode(data.StructListaRam[0])
 
 }
