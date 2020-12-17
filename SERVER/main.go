@@ -150,9 +150,9 @@ import (
 
 //STRUCTS DEL WEB SERVICE
 type structRam struct {
-	Memoria_Total     int `json:"Memoria_Total,omitempty"`
-	Memoria_en_uso    int `json:"Memoria_en_uso,omitempty"`
-	Porcentaje_en_uso int `json:"Porcentaje_en_uso,omitempty"`
+	Memoria_Total     int `json:"Total_de_memoria_RAM_del_servidor,omitempty"`
+	Memoria_en_uso    int `json:"Total_de_memoria_RAM_consumida,omitempty"`
+	Porcentaje_en_uso int `json:"Porcentaje_de_consumo_de_RAM,omitempty"`
 }
 
 type StructListaRam struct {
