@@ -20,7 +20,7 @@ struct sysinfo inf;
 
 static int write_file(struct seq_file * archivo, void *v) {	
     si_meminfo(&inf);
-    long total_memoria 	= (inf.totalram * 8);
+    long total_memoria 	= (inf.totalram * 4);
     long memoria_libre 	= (inf.freeram * 4 );
     long memoria_utilizada = total_memoria - memoria_libre;
     seq_printf(archivo, "{\n");
