@@ -158,7 +158,9 @@ func wsEndPoint2(w http.ResponseWriter, r *http.Request) {
 
 func porcentaje(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println(cpu.Percent(1, false)) //TRUE SI QUEREMOS VALOR POR CPU
+	valor := cpu.Percent(0, false)
+
+	fmt.Println("valor:" + valor) //TRUE SI QUEREMOS VALOR POR CPU
 
 }
 
