@@ -29,7 +29,7 @@
         
                 socket.onopen=()=>{
                     console.log("Conexion establecida");
-                    socket.send("RAM");
+                    socket.send("CPU_PORCENTAJE");
                 }
         
                 socket.onclose=(event)=>{
@@ -38,8 +38,13 @@
         
                 
                 socket.onmessage=(msg)=>{
-                    ram_a=msg
+                    ram_a=JSON.parse(msg.data).Time
                     console.log(ram_a);
+                    document.getElementById("cpu_c").innerHTML = ram_a;
+                    document.getElementById('porcentaje_cpu').setAttribute("style","width:"+ram_a+"%");
+                    myLineChart.data.datasets[0].data.shift();
+                    myLineChart.data.datasets[0].data[10]=ram_a;
+                    myLineChart.update();
                     
                 }
         
@@ -65,8 +70,7 @@
             }
     
             
-            socket.onmessage=(msg)=>{
-                console.log(msg);
+            socket.onmessage=(msg)=>{                
                 ram_a=JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_del_servidor;
                 ram_b=JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_consumida;
                 ram_c=JSON.parse(msg.data).lista_ram[0].Porcentaje_de_consumo_de_RAM;
@@ -76,6 +80,9 @@
                 document.getElementById("ram_c").innerHTML = ram_c;
                 document.getElementById('porcentaje_ram').setAttribute("style","width:"+ram_c+"%");
                 console.log("Recibiendo RAM"+ram_a+"_"+ram_b+"_"+ram_c);
+                myLineChart2.data.datasets[0].data.shift();
+                myLineChart2.data.datasets[0].data[10]=ram_c;
+                myLineChart2.update();
             }
     
             socket.onerror=(error)=>{
@@ -293,6 +300,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-xl-12 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Grafica</h6>
+                                    
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="myAreaChart2"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                        
                     </div>
 
@@ -305,7 +329,7 @@
                     <div class="row">
                         
                         <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
+                        <div class="col-xl-12 col-lg-7">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div
@@ -321,29 +345,35 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Porcentaje</h6>
-                                   
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">                                        
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Porcentaje
-                                        </span>
-                                    </div>
-                                </div>
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-12 col-md-6 mb-4">
+    <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Porcentaje de Consumo
+                    </div>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <div id="cpu_c" class="h5 mb-0 mr-3 font-weight-bold text-gray-800">0%</div>
+                        </div>
+                        <div class="col">
+                            <div class="progress progress-sm mr-2">
+                                <div id="porcentaje_cpu" class="progress-bar bg-info" role="progressbar"
+                                    style="width: 0%" aria-valuenow="50" aria-valuemin="0"
+                                    aria-valuemax="100"></div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-percent fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                       
                     </div>
 
                     <a class="btn btn-primary" href='javascript:;' onclick="socket2();" role="button"> PROCESOS</a>
