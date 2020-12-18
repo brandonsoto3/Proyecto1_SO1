@@ -87,11 +87,12 @@
 
     function eliminar(PID){
         const Http = new XMLHttpRequest();
-        const url='http://http://3.138.204.175/kill/'+PID;        
+        const url='http://3.138.204.175/kill/'+PID;        
         Http.open("GET", url);
         Http.send();
         Http.onreadystatechange = (e) => {
         console.log(Http.responseText)
+}
 }
 
         
