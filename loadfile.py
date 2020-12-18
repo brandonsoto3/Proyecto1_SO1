@@ -1,12 +1,16 @@
-from locust import HttpUser, task, between
+from locust import Locust, TaskSet,task,bewteen
 
-class MyUser(HttpUser):
-    wait_time = between(5, 15)
-
-    @task(4)
-    def index(self):
-        self.client.get("http://3.138.204.175/procesos")
+class UserBehaviour(TaskSet):
 
     @task(1)
-    def about(self):
-        self.client.get("http://3.138.204.175/ram")
+    def mytask1(l):
+        print("I am logged In")
+
+    @task(2)
+    def mytask2(m):
+        print("I am logged Out")
+
+
+class User(Locust):
+    task_set = UserBehaviour
+    wait_time = between(5, 10)
