@@ -27,7 +27,7 @@ static int write_file(struct seq_file * archivo, void *v) {
     seq_printf(archivo, "       \"lista_ram\":[\n");
     seq_printf(archivo, "               {\n");
     seq_printf(archivo, "                   \"Total_de_memoria_RAM_del_servidor\":%lu,\n", total_memoria / 1024);
-    seq_printf(archivo, "                   \"Total_de_memoria_RAM_consumida\":%lu,\n",(memoria_utilizada / 1024));
+    seq_printf(archivo, "                   \"Total_de_memoria_RAM_consumida\":%lu,\n",(memoria_utilizada / 1024)); 
     seq_printf(archivo, "                   \"Porcentaje_de_consumo_de_RAM\":%i\n", (memoria_utilizada * 100)/total_memoria);
     seq_printf(archivo, "               }");
     seq_printf(archivo, "       ]\n");
