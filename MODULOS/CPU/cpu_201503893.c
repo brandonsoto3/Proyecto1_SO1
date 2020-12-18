@@ -27,20 +27,28 @@ void imprimir_estado(struct task_struct *task_next, struct seq_file * m)
 {
 
     
-        printk(KERN_INFO task_next);
+        
 
     if(task_next->state == -1){
         seq_printf(m,"      \"Estado\":\"NO EJECUTABLE\"");
     }else if(task_next->state == 0){
         seq_printf(m,"      \"Estado\":\"EJECUCION\"");
     }else if(task_next->state == 1){
-        seq_printf(m,"      \"Estado\":\"SUSPENDIDO\""); //INTERRUPTIBLE
+        seq_printf(m,"      \"Estado\":\"EJECUCION\""); //INTERRUPTIBLE
     }else if(task_next->state == 2){
-        seq_printf(m,"      \"Estado\":\"SUSPENDIDO\""); //UNINTERRUPTIBLE
+        seq_printf(m,"      \"Estado\":\"EJECUCION\""); //UNINTERRUPTIBLE
     }else if(task_next->state == 4){ 
-        seq_printf(m,"      \"Estado\":\"ZOMBIE\""); //STOPEED
+        seq_printf(m,"      \"Estado\":\"DETENIDO\""); //STOPEED
     }else if(task_next->state == 8){ 
         seq_printf(m,"      \"Estado\":\"DETENIDO\"");//TRACED
+    }else if(task_next->state == 256){ 
+        seq_printf(m,"      \"Estado\":\"SUSPENDIDO\"");
+    }else if(task_next->state == 512){ 
+        seq_printf(m,"      \"Estado\":\"SUSPENDIDO\"");
+    }else if(task_next->state == 1024){ 
+        seq_printf(m,"      \"Estado\":\"ZOMBIE\"");
+    }else if(task_next->state == 64){ 
+        seq_printf(m,"      \"Estado\":\"ZOMBIE\"");
     }else{
         seq_printf(m,"      \"Estado\":\"DESCONOCIDO\"");
     }
@@ -73,7 +81,7 @@ void recorrer_tareas(struct task_struct *task, struct seq_file * m, int num)
     seq_printf(m,"      {\n");    
     seq_printf(m,"      \"PID\":%d,\n",task_next->pid);	
     seq_printf(m,"      \"Nombre\":\"%s\",\n",task_next->comm);
-    seq_printf(m,"      \"Usuario\":\"%d\",\n",task_next->cred->uid);
+    seq_printf(m,"      \"Usuario\":\"%d\",\n",task_next->cred->uid.val);
     
     //IMPRIMIMOS EL ESTADO
     imprimir_estado(task_next,m);
