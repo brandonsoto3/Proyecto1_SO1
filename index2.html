@@ -6,6 +6,7 @@
     <script>
 
 function socket(parametro){
+    contador=0;
         let socket=new WebSocket("ws://3.138.204.175/ws")
         console.log("Esperando conexion del Socket")
 
@@ -20,7 +21,12 @@ function socket(parametro){
 
         
         socket.onmessage=(msg)=>{
-            console.log(msg);
+            console.log(JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_del_servidor);
+            console.log(JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_consumida);
+            console.log(JSON.parse(msg.data).lista_ram[0].Porcentaje_de_consumo_de_RAM);
+            
+            document.getElementById("content").innerHTML = "whatever"+contador;
+            contador++;
         }
 
         socket.onerror=(error)=>{
@@ -34,7 +40,7 @@ function socket(parametro){
     
 
     <h1>WELCOMES</h1>
-    
+    <div id="content"></div>
     <div>
     <a class="btn btn-primary btn-lg" href='javascript:;' onclick="socket('cpu');" role="button">
         cpu

@@ -196,6 +196,41 @@ var (
 	tamanio float64 = 0
 )
 
+func reader2(conn *websocket.Conn) {
+
+	for {
+		messageType, p, err := conn.ReadMessage()
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		//MENSAJE RECIBIDO DESDE EL CLIENTE
+		log.Println(string(p))
+
+		file, err := os.Open("/proc/cpu_201503893")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer func() {
+			if err = file.Close(); err != nil {
+				log.Fatal(err)
+			}
+		}()
+
+		b, err := ioutil.ReadAll(file)
+
+		for {
+			if err := conn.WriteMessage(messageType, b); err != nil {
+				log.Println(err)
+			}
+			time.Sleep(2 * time.Second)
+		}
+
+	}
+
+}
+
 func reader(conn *websocket.Conn) {
 
 	for {
@@ -219,7 +254,6 @@ func reader(conn *websocket.Conn) {
 		}()
 
 		b, err := ioutil.ReadAll(file)
-		fmt.Print(b)
 
 		for {
 			if err := conn.WriteMessage(messageType, b); err != nil {
@@ -245,6 +279,19 @@ func wsEndPoint(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func wsEndPoint2(w http.ResponseWriter, r *http.Request) {
+
+	ws, err := upgrader.Upgrade(w, r, nil)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println("Conexion establecida")
+	reader(ws)
+
+}
+
 func main() {
 	//Obtenemos el tamanio
 	leerInicio()
@@ -256,6 +303,7 @@ func main() {
 	router.HandleFunc("/ram", informacionRAM).Methods("GET", "OPTIONS")
 	router.HandleFunc("/kill/{id}", matarProceso).Methods("POST", "OPTIONS")
 	router.HandleFunc("/ws", wsEndPoint)
+	router.HandleFunc("/ws2", wsEndPoint2)
 
 	fmt.Println("El servidor se ha iniciado en el puerto 80")
 	log.Fatal(http.ListenAndServe(":80", router))

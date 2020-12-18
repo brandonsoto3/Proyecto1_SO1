@@ -20,7 +20,66 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
-
+<script>
+    function socket(){
+        
+            let socket=new WebSocket("ws://3.138.204.175/ws")
+            console.log("Esperando conexion del Socket")
+    
+            socket.onopen=()=>{
+                console.log("Conexion establecida");
+                socket.send(parametro);
+            }
+    
+            socket.onclose=(event)=>{
+                console.log("Socket Cerrado correctamente",event);            
+            }
+    
+            
+            socket.onmessage=(msg)=>{
+                ram_a=JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_del_servidor;
+                ram_b=JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_consumida;
+                ram_c=JSON.parse(msg.data).lista_ram[0].Porcentaje_de_consumo_de_RAM;
+                
+                document.getElementById("ram_a").innerHTML = ram_a;
+                document.getElementById("ram_b").innerHTML = ram_b;
+                document.getElementById("ram_c").innerHTML = ram_c;
+                console.log("Recibiendo RAM"+ram_a+"_"+ram_b+"_"+ram_c);
+            }
+    
+            socket.onerror=(error)=>{
+                console.log("Error al conectar",error);            
+            }
+            }
+    
+        </script>
+        <script>
+            function socket2(){
+                
+                    let socket=new WebSocket("ws2://3.138.204.175/ws2")
+                    console.log("Esperando conexion del Socket")
+            
+                    socket.onopen=()=>{
+                        console.log("Conexion establecida");
+                        socket.send(parametro);
+                    }
+            
+                    socket.onclose=(event)=>{
+                        console.log("Socket Cerrado correctamente",event);            
+                    }
+            
+                    
+                    socket.onmessage=(msg)=>{
+                        ram_a=JSON.parse(msg.data);                                              
+                        console.log(ram_a);
+                    }
+            
+                    socket.onerror=(error)=>{
+                        console.log("Error al conectar",error);            
+                    }
+                    }
+            
+                </script>
 </head>
 
 <body id="page-top">
@@ -67,8 +126,9 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    Monitor de Memoria RAM
+                <div class="container-fluid">                    
+                    <a class="btn btn-primary" href='javascript:;' onclick="socket();" role="button">Monitor de Memoria RAM</a>
+                    
                     <!-- Content Row -->
                     <div class="row">
 
@@ -80,7 +140,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Total Ram Servidor</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                            <div id="ram_a" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -98,7 +158,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Total Ram Consumida</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                            <div  id="ram_b" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -118,7 +178,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                    <div id="ram_c" class="h5 mb-0 mr-3 font-weight-bold text-gray-800">0%</div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
@@ -138,8 +198,8 @@
                         </div>
                        
                     </div>
-                    
-                    Monitor de CPU
+                    <a class="btn btn-primary" href='javascript:;' onclick="socket2();" role="button"> Monitor de CPU</a>
+                   
                     <!-- Content Row -->
                     <div class="row">
 
@@ -411,7 +471,7 @@
                                 <div class="card-body">
                                     <div class="text-center">
                                         <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                            src="img/undraw_posting_photo.svg" alt="">
+                                            src="src/img/undraw_posting_photo.svg" alt="">
                                     </div>
                                     <p>Add some quality, svg illustrations to your project courtesy of <a
                                             target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
