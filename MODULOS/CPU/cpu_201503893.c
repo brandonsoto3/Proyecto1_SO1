@@ -34,11 +34,9 @@ void imprimir_estado(struct task_struct *task_next, struct seq_file * m)
     }else if(task_next->state == 2){
         seq_printf(m,"      \"Estado\":\"SUSPENDIDO\""); //UNINTERRUPTIBLE
     }else if(task_next->state == 4){ 
-        seq_printf(m,"      \"Estado\":\"DETENIDO\""); //STOPEED
+        seq_printf(m,"      \"Estado\":\"ZOMBIE\""); //STOPEED
     }else if(task_next->state == 8){ 
         seq_printf(m,"      \"Estado\":\"DETENIDO\"");//TRACED
-    }else if(task_next->state == 16){
-        seq_printf(m,"      \"Estado\":\"ZOMBIE\"");
     }else{
         seq_printf(m,"      \"Estado\":\"DESCONOCIDO\"");
     }

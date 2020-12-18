@@ -28,7 +28,7 @@
     
             socket.onopen=()=>{
                 console.log("Conexion establecida");
-                socket.send(parametro);
+                socket.send("RAM");
             }
     
             socket.onclose=(event)=>{
@@ -44,6 +44,7 @@
                 document.getElementById("ram_a").innerHTML = ram_a;
                 document.getElementById("ram_b").innerHTML = ram_b;
                 document.getElementById("ram_c").innerHTML = ram_c;
+                document.getElementById('porcentaje_ram').setAttribute("style","width:"+ram_c+"%");
                 console.log("Recibiendo RAM"+ram_a+"_"+ram_b+"_"+ram_c);
             }
     
@@ -55,13 +56,19 @@
         </script>
         <script>
             function socket2(){
+
+                ejecucion=0;
+                suspendidos=0;
+                detenidos=0;
+                zombies=0;
+
                 
-                    let socket=new WebSocket("ws2://3.138.204.175/ws2")
+                    let socket=new WebSocket("ws://3.138.204.175/ws2")
                     console.log("Esperando conexion del Socket")
             
                     socket.onopen=()=>{
                         console.log("Conexion establecida");
-                        socket.send(parametro);
+                        socket.send("CPU");
                     }
             
                     socket.onclose=(event)=>{
@@ -70,8 +77,24 @@
             
                     
                     socket.onmessage=(msg)=>{
-                        ram_a=JSON.parse(msg.data);                                              
-                        console.log(ram_a);
+                        procesos=JSON.parse(msg.data).lista_procesos;
+                        
+                        
+                        
+                        for(var index in procesos){
+
+                            estado=procesos[index].Estado;
+                            if(estado==='SUSPENDIDOS'){
+                                suspendidos=suspendidos+1;
+                            }else if(estado===''){
+
+                            }                           
+                            console.log(estado);
+
+                        }
+
+
+                        
                     }
             
                     socket.onerror=(error)=>{
@@ -143,7 +166,7 @@
                                             <div id="ram_a" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-server fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -182,15 +205,15 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                        <div id="porcentaje_ram" class="progress-bar bg-info" role="progressbar"
+                                                            style="width: 0%" aria-valuenow="50" aria-valuemin="0"
                                                             aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                            <i class="fas fa-percent fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -198,6 +221,7 @@
                         </div>
                        
                     </div>
+
                     <a class="btn btn-primary" href='javascript:;' onclick="socket2();" role="button"> Monitor de CPU</a>
                    
                     <!-- Content Row -->
@@ -254,7 +278,7 @@
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
                                                         <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                            style="width: 100%" aria-valuenow="50" aria-valuemin="0"
                                                             aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
@@ -269,6 +293,97 @@
                         </div>
                        
                     </div>
+                    PROCESOS
+                    <div class="row">
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                En ejecucion</div>
+                                            <div id="ejecucion" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-eject fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Suspendidos</div>
+                                            <div id="suspendidos" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-pause fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                             <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Detenidos</div>
+                                            <div id="detenidos" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-stop fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Zombies</div>
+                                                <div id="zombies" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-ghost fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Total</div>
+                                            <div id="totales" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="row">
                         
