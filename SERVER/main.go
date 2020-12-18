@@ -78,8 +78,8 @@ func reader3(conn *websocket.Conn) {
 		log.Println(string(p))
 		valor, _ := cpu.Percent(0, false)
 		por := valor[0]
-		val := math.Ceil(por*100) / 100
-		m := Message{"AÑON", "Hello", val}
+		//val := math.Ceil(por*100) / 100
+		m := Message{"Porcentaje", "CPU", por}
 
 		b, err := json.Marshal(m)
 		for {
