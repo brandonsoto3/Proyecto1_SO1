@@ -1,7 +1,8 @@
-import time
-from locust import HttpUser, task
+from locust import User, task, between
 
-class QuickstartUser(HttpUser):
+class MyUser(User):
     @task
-    def on_start(self):
-        self.client.get("http://3.138.204.175/ram")
+    def my_task(self):
+        print("executing my_task")
+
+    wait_time = between(0.5, 10)

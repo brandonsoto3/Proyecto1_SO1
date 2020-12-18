@@ -81,7 +81,7 @@ void recorrer_tareas(struct task_struct *task, struct seq_file * m, int num)
     seq_printf(m,"      {\n");    
     seq_printf(m,"      \"PID\":%d,\n",task_next->pid);	
     seq_printf(m,"      \"Nombre\":\"%s\",\n",task_next->comm);
-    seq_printf(m,"      \"Usuario\":\"%d\",\n",task_next->cred->uid.val);
+    seq_printf(m,"      \"Usuario\":\"%d\",\n",task_next->cred->uid);
     
     //IMPRIMIMOS EL ESTADO
     imprimir_estado(task_next,m);
