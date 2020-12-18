@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"os"
 	"os/exec"
@@ -159,8 +160,9 @@ func wsEndPoint2(w http.ResponseWriter, r *http.Request) {
 func porcentaje(w http.ResponseWriter, r *http.Request) {
 
 	valor, _ := cpu.Percent(0, false)
+	por := valor[0]
 
-	fmt.Println(valor[0]) //TRUE SI QUEREMOS VALOR POR CPU
+	fmt.Println(math.Ceil(por*100) / 100) //TRUE SI QUEREMOS VALOR POR CPU
 
 }
 
