@@ -88,7 +88,7 @@
 
 
 
-                $("#dataTable tr").remove();
+               
                 ejecucion=0;
                 suspendidos=0;
                 detenidos=0;
@@ -109,11 +109,14 @@
             
                     
                     socket.onmessage=(msg)=>{
+//                        $("#dataTable tr").remove();
+                            $("#dataTable").find("tr:gt(0)").remove();
+
+
                         procesos=JSON.parse(msg.data).lista_procesos;
                         
                         var tbody = document.getElementById('dataTable');
                         
-                    console.log(procesos[0])
                    
                         for(var index in procesos){
 
@@ -125,19 +128,14 @@
 
                             console.log(RAM+"..."+PID);
 
-
-
                             var tr = "<tr>";
                             tr += "<td><strong>" + PID+ "</strong></td>" + "<td>" + Nombre + "</td>" + "<td>" + Usuario + "</td>" + "<td>" + Estado + "</td>"+ "<td>" +RAM + "</td><td><a class=\"btn btn-danger\"href='javascript:;' onclick=\"eliminar(PID);\"role=\"button\">X</a></td></tr>";
-                            tbody.innerHTML += tr;
-
+                            tbody.innerHTML += tr;                            
                             
-                            
-
                         }
 
 
-                        
+                                               
                     }
             
                     socket.onerror=(error)=>{
