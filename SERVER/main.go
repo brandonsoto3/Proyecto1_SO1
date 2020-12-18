@@ -160,7 +160,7 @@ func porcentaje(w http.ResponseWriter, r *http.Request) {
 
 	valor, _ := cpu.Percent(0, false)
 
-	fmt.Println(float64(valor)) //TRUE SI QUEREMOS VALOR POR CPU
+	fmt.Println(valor) //TRUE SI QUEREMOS VALOR POR CPU
 
 }
 
