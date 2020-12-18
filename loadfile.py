@@ -1,17 +1,10 @@
-from locust import HttpUser, between, task
+import time
+from locust import HttpUser, task
 
+class QuickstartUser(HttpUser):
+    @task
+    def access_model(self):
+        self.client.get("http://3.138.204.175/ram")
 
-class WebsiteUser(HttpUser):
-    wait_time = between(5, 15)
-    
     def on_start(self):
-        self.client.get("/")
-    
-    @task
-    def index(self):
-        self.client.get("/")
-        self.client.get("/static/assets.js")
-        
-    @task
-    def about(self):
-        self.client.get("/about/")
+        self.client.get("http://3.138.204.175/procesos")
