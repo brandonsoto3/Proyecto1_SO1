@@ -215,7 +215,7 @@ func main() {
 	router.HandleFunc("/kill/{id}", matarProceso).Methods("POST", "OPTIONS")
 	router.HandleFunc("/ws", wsEndPoint)
 	router.HandleFunc("/ws2", wsEndPoint2)
-	router.HandleFunc("/ws2", wsEndPoint3)
+	router.HandleFunc("/ws3", wsEndPoint3)
 	router.HandleFunc("/porcentaje", porcentaje)
 
 	fmt.Println("El servidor se ha iniciado en el puerto 80")
