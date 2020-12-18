@@ -12,7 +12,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
-	_ "github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/cpu"
 )
 
 var upgrader = websocket.Upgrader{
@@ -158,7 +158,7 @@ func wsEndPoint2(w http.ResponseWriter, r *http.Request) {
 
 func porcentaje(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("Hola perros")
+	fmt.Println(cpu.Percent(0, true))
 
 }
 
