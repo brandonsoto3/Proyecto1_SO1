@@ -66,6 +66,7 @@
     
             
             socket.onmessage=(msg)=>{
+                console.log(msg);
                 ram_a=JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_del_servidor;
                 ram_b=JSON.parse(msg.data).lista_ram[0].Total_de_memoria_RAM_consumida;
                 ram_c=JSON.parse(msg.data).lista_ram[0].Porcentaje_de_consumo_de_RAM;

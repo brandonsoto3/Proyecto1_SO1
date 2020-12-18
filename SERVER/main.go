@@ -152,6 +152,7 @@ func reader(conn *websocket.Conn) {
 			}()
 
 			b, err := ioutil.ReadAll(file)
+			log.Println(b)
 			if err := conn.WriteMessage(messageType, b); err != nil {
 				log.Println(err)
 			}
