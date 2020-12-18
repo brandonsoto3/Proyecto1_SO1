@@ -288,7 +288,7 @@ func wsEndPoint2(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("Conexion establecida")
-	reader(ws)
+	reader2(ws)
 
 }
 
@@ -364,14 +364,7 @@ func matarProceso(w http.ResponseWriter, req *http.Request) {
 //FUNCIONES ADICIONALES-------------------------------------------------------------------------------------------------------------------------------
 func leerInicio() {
 	file, _ := ioutil.ReadFile("/proc/memo_201503893")
-
 	data := StructListaRam{}
-
 	_ = json.Unmarshal([]byte(file), &data)
-
 	tamanio = float64(data.StructListaRam[0].Memoria_Total)
-	/*fmt.Println("Tamanio: ", tamanio)
-	for i := 0; i < len(data.StructListaRam); i++ {
-		fmt.Println("Valor: ", data.StructListaRam[i])
-	}*/
 }
