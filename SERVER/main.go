@@ -50,16 +50,40 @@ type structKill struct {
 	Pid string `json:"pid,omitempty"`
 }
 
-type Message struct {
-	Name string
-	Body string
-	Time int64
+type Porcentaje_CPU struct {
+	valor float64
 }
 
 //VARIABLES
 var (
 	tamanio float64 = 0
 )
+
+func reader3(conn *websocket.Conn) {
+
+	for {
+		messageType, p, err := conn.ReadMessage()
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		//MENSAJE RECIBIDO DESDE EL CLIENTE
+		log.Println(string(p))
+		valor, _ := cpu.Percent(0, false)
+		percentaje := valor[0]
+		m := Porcentaje_CPU{math.Ceil(percentaje*100) / 100}
+
+		b, err := json.Marshal(m)
+		for {
+			if err := conn.WriteMessage(messageType, b); err != nil {
+				log.Println(err)
+			}
+			time.Sleep(2 * time.Second)
+		}
+	}
+
+}
 
 func reader2(conn *websocket.Conn) {
 
@@ -157,6 +181,19 @@ func wsEndPoint2(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func wsEndPoint3(w http.ResponseWriter, r *http.Request) {
+
+	ws, err := upgrader.Upgrade(w, r, nil)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println("Conexion establecida")
+	reader3(ws)
+
+}
+
 func porcentaje(w http.ResponseWriter, r *http.Request) {
 
 	valor, _ := cpu.Percent(0, false)
@@ -178,6 +215,7 @@ func main() {
 	router.HandleFunc("/kill/{id}", matarProceso).Methods("POST", "OPTIONS")
 	router.HandleFunc("/ws", wsEndPoint)
 	router.HandleFunc("/ws2", wsEndPoint2)
+	router.HandleFunc("/ws2", wsEndPoint3)
 	router.HandleFunc("/porcentaje", porcentaje)
 
 	fmt.Println("El servidor se ha iniciado en el puerto 80")

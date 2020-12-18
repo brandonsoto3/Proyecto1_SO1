@@ -20,6 +20,35 @@
 
     <!-- Custom styles for this template-->
     <link href="src/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <script>
+        function cpu_porcentaje(){
+            
+                let socket=new WebSocket("ws://3.138.204.175/ws3")
+                console.log("Esperando conexion del Socket")
+        
+                socket.onopen=()=>{
+                    console.log("Conexion establecida");
+                    socket.send("RAM");
+                }
+        
+                socket.onclose=(event)=>{
+                    console.log("Socket Cerrado correctamente",event);            
+                }
+        
+                
+                socket.onmessage=(msg)=>{
+                    ram_a=JSON.parse(msg.data)
+                    console.log(ram_a);
+                    
+                }
+        
+                socket.onerror=(error)=>{
+                    console.log("Error al conectar",error);            
+                }
+                }
+        
+            </script>
 <script>
     function socket(){
         
@@ -222,7 +251,7 @@
                        
                     </div>
 
-                    <a class="btn btn-primary" href='javascript:;' onclick="socket2();" role="button"> Monitor de CPU</a>
+                    <a class="btn btn-primary" href='javascript:;' onclick="cpu_porcentaje();" role="button"> Monitor de CPU</a>
                    
                     <!-- Content Row -->
                     <div class="row">
