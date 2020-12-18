@@ -183,7 +183,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":80", router))
 }
 
-func prueba() {
+func prueba(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(Percent(0, true))
 }
 
