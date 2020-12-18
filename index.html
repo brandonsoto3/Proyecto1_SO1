@@ -84,16 +84,21 @@
     
         </script>
         <script>
+
+    function eliminar(PID){
+        const Http = new XMLHttpRequest();
+        const url='http://http://3.138.204.175/kill/'+PID;        
+        Http.open("GET", url);
+        Http.send();
+        Http.onreadystatechange = (e) => {
+        console.log(Http.responseText)
+}
+
+        
+
             function socket2(){
 
-
-
-               
-                ejecucion=0;
-                suspendidos=0;
-                detenidos=0;
-                zombies=0;
-
+                
                 
                     let socket=new WebSocket("ws://3.138.204.175/ws2")
                     console.log("Esperando conexion del Socket")
@@ -109,6 +114,12 @@
             
                     
                     socket.onmessage=(msg)=>{
+                        ejecucion=0;
+                suspendidos=0;
+                detenidos=0;
+                zombies=0;
+                total=0;
+                desconocidos=0;
 //                        $("#dataTable tr").remove();
                             $("#dataTable").find("tr:gt(0)").remove();
 
@@ -119,22 +130,42 @@
                         
                    
                         for(var index in procesos){
-
+                            
                             PID=procesos[index].PID;
                             Nombre=procesos[index].Nombre;
                             Usuario=procesos[index].Usuario;
                             Estado=procesos[index].Estado;
-                            RAM=procesos[index].Porcentaje_RAM;
+                            RAM=procesos[index].Porcentaje_RAM;                            
 
-                            console.log(RAM+"..."+PID);
+                            if(Estado==="SUSPENDIDO"){
+                                suspendidos++;
+                            }else if(Estado==="EJECUCION"){
+                                ejecucion++;
+                            }else if(Estado==="DETENIDO"){
+                                detenidos++;
+                            }else if(Estado==="ZOMBIE"){
+                                zombies++;
+                            }else{
+                                desconocidos++;
+                            }
 
+
+                           
                             var tr = "<tr>";
-                            tr += "<td><strong>" + PID+ "</strong></td>" + "<td>" + Nombre + "</td>" + "<td>" + Usuario + "</td>" + "<td>" + Estado + "</td>"+ "<td>" +RAM + "</td><td><a class=\"btn btn-danger\"href='javascript:;' onclick=\"eliminar(PID);\"role=\"button\">X</a></td></tr>";
+                            tr += "<td>"+index+"</td><td><strong>" + PID+ "</strong></td>" + "<td>" + Nombre + "</td>" + "<td>" + Usuario + "</td>" + "<td>" + Estado + "</td>"+ "<td>" +RAM + "</td><td><a class=\"btn btn-danger\"href='javascript:;' onclick=\"eliminar("+PID+");\"role=\"button\">X</a></td></tr>";
                             tbody.innerHTML += tr;                            
                             
                         }
 
-
+                        total=suspendidos+detenidos+ejecucion+zombies+desconocidos;
+                        document.getElementById("ejecucion").innerHTML = ejecucion;
+                        document.getElementById("suspendidos").innerHTML = suspendidos;
+                        document.getElementById("detenidos").innerHTML = detenidos;
+                        document.getElementById("zombies").innerHTML = zombies;
+                        document.getElementById("totales").innerHTML = total;
+                        document.getElementById("desconocidos").innerHTML = desconocidos;
+                        console.log("Recibiendo PROCESOS");
+                        
                                                
                     }
             
@@ -386,7 +417,25 @@
                                 </div>
                             </div>
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-4 col-md-6 mb-4">
+
+                        <div class="col-xl-2 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Desconocidos</div>
+                                            <div id="desconocidos" class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -413,6 +462,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>No.</th>
                         <th>PID</th>
                         <th>Nombre</th>
                         <th>Usuario</th>
