@@ -25,6 +25,10 @@ long total_memoria = 0;
 
 void imprimir_estado(struct task_struct *task_next, struct seq_file * m)
 {
+
+    
+        seq_printf(m,task_next);
+
     if(task_next->state == -1){
         seq_printf(m,"      \"Estado\":\"NO EJECUTABLE\"");
     }else if(task_next->state == 0){
