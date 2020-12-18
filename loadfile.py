@@ -1,16 +1,13 @@
-from locust import Locust, TaskSet,task,bewteen
+from locust import HttpLocust, TaskSet,task,between
+
+#http://newtours.demoaut.com"
 
 class UserBehaviour(TaskSet):
-
-    @task(1)
-    def mytask1(l):
-        print("I am logged In")
-
-    @task(2)
-    def mytask2(m):
-        print("I am logged Out")
+    @task
+    def launch_Url(self):
+        self.client.get("http://3.138.204.175/ram")
 
 
-class User(Locust):
-    task_set = UserBehaviour
+class User(HttpLocust):
+    task_set=UserBehaviour
     wait_time = between(5, 10)
