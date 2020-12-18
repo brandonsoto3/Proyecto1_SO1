@@ -1,4 +1,4 @@
-from locust import HttpLocust, TaskSet,task,between
+from locust import HttpUser, TaskSet,task,between
 
 #http://newtours.demoaut.com"
 
