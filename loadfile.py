@@ -1,13 +1,17 @@
-from locust import HttpUser, TaskSet,task,between
+from locust import HttpUser, between, task
 
-#http://newtours.demoaut.com"
 
-class UserBehaviour(TaskSet):
+class WebsiteUser(HttpUser):
+    wait_time = between(5, 15)
+    
+    def on_start(self):
+        self.client.get("/")
+    
     @task
-    def launch_Url(self):
-        self.client.get("http://3.138.204.175/ram")
-
-
-class User(HttpUser):
-    task_set=UserBehaviour
-    wait_time = between(5, 10)
+    def index(self):
+        self.client.get("/")
+        self.client.get("/static/assets.js")
+        
+    @task
+    def about(self):
+        self.client.get("/about/")
