@@ -59,6 +59,12 @@ var (
 	tamanio float64 = 0
 )
 
+type Message struct {
+	Name string
+	Body string
+	Time int64
+}
+
 func reader3(conn *websocket.Conn) {
 
 	for {
@@ -70,9 +76,7 @@ func reader3(conn *websocket.Conn) {
 		}
 		//MENSAJE RECIBIDO DESDE EL CLIENTE
 		log.Println(string(p))
-		valor, _ := cpu.Percent(0, false)
-		percentaje := valor[0]
-		m := Porcentaje_CPU{math.Ceil(percentaje*100) / 100}
+		m := Message{"AÑON", "Hello", 1294706395881547000}
 
 		b, err := json.Marshal(m)
 		for {

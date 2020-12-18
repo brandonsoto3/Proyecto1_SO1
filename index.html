@@ -38,7 +38,7 @@
         
                 
                 socket.onmessage=(msg)=>{
-                    ram_a=JSON.parse(msg.data)
+                    ram_a=msg
                     console.log(ram_a);
                     
                 }
