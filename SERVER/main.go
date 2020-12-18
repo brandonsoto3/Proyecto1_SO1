@@ -220,7 +220,7 @@ func main() {
 	router.HandleFunc("/", inicio)
 	router.HandleFunc("/procesos", enviarProcesos).Methods("GET", "OPTIONS")
 	router.HandleFunc("/ram", informacionRAM).Methods("GET", "OPTIONS")
-	router.HandleFunc("/kill/{id}", matarProceso).Methods("POST", "OPTIONS")
+	router.HandleFunc("/kill/{id}", matarProceso).Methods("GET", "OPTIONS")
 	router.HandleFunc("/ws", wsEndPoint)
 	router.HandleFunc("/ws2", wsEndPoint2)
 	router.HandleFunc("/ws3", wsEndPoint3)
