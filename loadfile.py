@@ -8,6 +8,6 @@ class UserBehaviour(TaskSet):
         self.client.get("http://3.138.204.175/ram")
 
 
-class User(HttpLocust):
+class User(HttpUser):
     task_set=UserBehaviour
     wait_time = between(5, 10)
