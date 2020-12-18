@@ -105,19 +105,18 @@ func reader2(conn *websocket.Conn) {
 		//MENSAJE RECIBIDO DESDE EL CLIENTE
 		log.Println(string(p))
 
-		file, err := os.Open("/proc/cpu_201503893")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer func() {
-			if err = file.Close(); err != nil {
+		for {
+			file, err := os.Open("/proc/cpu_201503893")
+			if err != nil {
 				log.Fatal(err)
 			}
-		}()
+			defer func() {
+				if err = file.Close(); err != nil {
+					log.Fatal(err)
+				}
+			}()
 
-		b, err := ioutil.ReadAll(file)
-
-		for {
+			b, err := ioutil.ReadAll(file)
 			if err := conn.WriteMessage(messageType, b); err != nil {
 				log.Println(err)
 			}
@@ -152,7 +151,6 @@ func reader(conn *websocket.Conn) {
 			}()
 
 			b, err := ioutil.ReadAll(file)
-			log.Println(b)
 			if err := conn.WriteMessage(messageType, b); err != nil {
 				log.Println(err)
 			}
